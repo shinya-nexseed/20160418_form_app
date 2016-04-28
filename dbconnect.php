@@ -34,8 +34,10 @@
     // $sql = 'SELECT * FROM `contacts` WHERE 1'; // 全件取得
     // $sql = 'SELECT * FROM contacts'; // 全件取得の省略版
     if (!empty($_GET)) {
-        $sql = 'SELECT * FROM `contacts` WHERE nick_name="' . $_GET['nick_name'] . '"'; // 一件取得
-
+        echo 'ほげ1';
+        // $sql = 'SELECT * FROM `contacts` WHERE nick_name="' . $_GET['nick_name'] . '"'; // 一件取得
+        $sql = 'SELECT * FROM `contacts` WHERE nick_name LIKE "%' . $_GET['nick_name'] . '%"'; // 一件取得
+        echo $sql;
         // ④処理実行 (CUDは表示する必要がないのでここまで)
         $contacts = mysqli_query($db, $sql);
         // mysqli_query()関数自体がsql文の実行をする
@@ -51,10 +53,15 @@
         //     echo '</pre>';
         //     echo '<hr>';
         // }
+    } else {
+        echo 'ほげ2';
+        // 検索されていない場合
+        echo '<h3>まずはニックネームで検索してください</h3>';
+        // 全件取得・読み込み・表示 (Read)
+        $sql = 'SELECT * FROM `contacts`';
+        $contacts = mysqli_query($db, $sql);
     }
 
-    // 条件を増やして検索機能を強化
-    // LIKE句を使うとあいまい検索
  ?>
 
 <!DOCTYPE html>
@@ -68,15 +75,15 @@
     <input type="text" name="nick_name">
     <input type="submit" value="お名前で検索">
   </form>
-  <?php if(!empty($_GET)): ?>
-    <?php while($contact = mysqli_fetch_assoc($contacts)): ?>
-      <!-- 繰り返し表示したいコードを記述 -->
-      <p>お名前 : <?php echo $contact['nick_name']; ?></p>
-      <p>メールアドレス : <?php echo $contact['email']; ?></p>
-      <p>お問い合わせ内容 : <?php echo $contact['content']; ?></p>
-      <hr>
-    <?php endwhile; ?>
-  <?php endif; ?>
+  <?php // if (!empty($_GET)): ?>
+  <?php while($contact = mysqli_fetch_assoc($contacts)): ?>
+    <!-- 繰り返し表示したいコードを記述 -->
+    <p>お名前 : <?php echo $contact['nick_name']; ?></p>
+    <p>メールアドレス : <?php echo $contact['email']; ?></p>
+    <p>お問い合わせ内容 : <?php echo $contact['content']; ?></p>
+    <hr>
+  <?php endwhile; ?>
+  <?php // endif; ?>
 </body>
 </html>
 
